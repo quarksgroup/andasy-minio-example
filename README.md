@@ -14,12 +14,13 @@ This is a simple example of how to deploy a Minio server with a persistent volum
 ```bash
 andasy setup
 ```
+
 This will start a wizard to create an app.
 
 2. Create a persistent volume
 
 ```bash
-andasy volume create --name minio_data -s 1
+andasy volume create -a minio_data -s 1 myvol
 ```
 
 This will create a volume named `minio_data` with 1 GiB of storage.
@@ -47,7 +48,7 @@ andasy secret set MINIO_ROOT_USER=<username> MINIO_ROOT_PASSWORD=<password>
 - You can access the UI of minio by changing the port to `9001` in the `config.hcl` file.
 - You can access the API of minio by changing the port to `9000` in the `config.hcl` file.
 
-The app will be available at `http://<app-name>.andasy.dev`. 
+The app will be available at `http://<app-name>.andasy.dev`.
 
 ## Minio CLI
 
