@@ -1,73 +1,90 @@
-# Andasy Minio Example
+# 🚀 Andasy + MinIO Example
 
-This is a simple example of how to deploy a Minio server with a persistent volume on Andasy.
+This guide walks you through deploying a **MinIO** server with a **persistent volume** using **Andasy**.
 
-## Prerequisites
+## 🧰 Prerequisites
 
-- Andasy account
-- Andasy CLI
+Make sure you have:
 
-## Setup
+- ✅ An [Andasy](https://andasy.io) account
+- 🖥️ Installed the [Andasy CLI](https://github.com/quarksgroup/andasy-cli)
 
-1. Create an an app on Andasy
+## ⚙️ Setup Instructions
+
+### 1️⃣ Create a New App on Andasy
+
+Start the setup wizard:
 
 ```bash
 andasy setup
 ```
 
-This will start a wizard to create an app.
+Follow the prompts to initialize your app.
 
-2. Create a persistent volume
+### 2️⃣ Create a Persistent Volume
 
 ```bash
-andasy volume create -a minio_data -s 1 myvol
+andasy volume create -a <minio_app_name> -s 1 minio_data
 ```
 
-This will create a volume named `minio_data` with 1 GiB of storage.
+🔸 Replace `<minio_app_name>` with your actual app name
+🔸 `minio_data` will be the volume name
+🔸 `-s 1` allocates **1 GiB** of storage
 
-3. Deploy the app
+### 3️⃣ Deploy the App
 
 ```bash
 andasy deploy
 ```
 
-This will deploy the app. Make sure the port in `config.hcl` is set to `9001` to access the ui of minio to configure it.
+✅ Make sure `config.hcl` uses port **9001** to access the **MinIO UI**.
 
-After the app is configured, you can change the port to `9000` and redeploy the app. This will make minio API accessible to the outside world.
+🔁 After configuration, switch to port **9000** and redeploy to expose the **MinIO API**.
 
-## Setting MinIO user
+## 🔐 Set MinIO Credentials
 
-After the app is deployed, the server has default user `minioadmin` and password `minioadmin` you can set the MinIO user and password using secrets (environment variables). To set them, use the secrets command:
+By default, MinIO uses:
+
+- Username: `minioadmin`
+- Password: `minioadmin`
+
+To set your own credentials securely:
 
 ```bash
-andasy secret set MINIO_ROOT_USER=<username> MINIO_ROOT_PASSWORD=<password>
+andasy secret set MINIO_ROOT_USER=<your-username> MINIO_ROOT_PASSWORD=<your-password>
 ```
 
-## Accessing the MinIO server
+## 🌐 Accessing MinIO
 
-- You can access the UI of minio by changing the port to `9001` in the `config.hcl` file.
-- You can access the API of minio by changing the port to `9000` in the `config.hcl` file.
+- 📺 UI: Set port `9001` in `config.hcl` and visit:
+  `http://<app-name>.andasy.dev`
 
-The app will be available at `http://<app-name>.andasy.dev`.
+- 🔌 API: Set port `9000` and access the same URL.
 
-## Minio CLI
+## 🛠️ Using the MinIO CLI (`mc`)
 
-You can use the minio cli to interact with the server.
+Configure your CLI to talk to your MinIO server:
 
 ```bash
 mc config host add minio http://<app-name>.andasy.dev 9000 <access-key> <secret-key>
 ```
 
-- `<app-name>` is the name of the app.
-- `<access-key>` is the access key of the user.
-- `<secret-key>` is the secret key of the user.
+Replace:
 
-You can use the minio cli to create a bucket, upload a file, download a file, etc.
+- `<app-name>` with your app name
+- `<access-key>` and `<secret-key>` with your MinIO credentials
+
+### 📦 Common CLI Commands
 
 ```bash
+# Create a new bucket
 mc mb minio/mybucket
+
+# Upload a file
 mc cp /path/to/file minio/mybucket
+
+# Download a file
 mc cp minio/mybucket/file /path/to/download
 ```
 
-For more information, see the [minio cli documentation](https://docs.min.io/docs/minio-client-complete-guide.html).
+📚 Learn more in the [MinIO CLI Docs](https://docs.min.io/enterprise/aistor-object-store/)
